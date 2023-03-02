@@ -1,0 +1,20 @@
+[package]
+name = "blobwar"
+version = "0.1.1"
+authors = ["frederic wagner <frederic.wagner@imag.fr>"]
+edition = "2018"
+
+[profile.release]
+debug = true
+
+[dependencies]
+term="*"
+itertools="*"
+libc="0.2"
+glob="*"
+serde_derive="*"
+serde="*"
+serde_json="*"
+
+[target.'cfg(unix)'.dependencies]
+nix="0.6"
