@@ -1,6 +1,6 @@
 //! Implementation of the min max algorithm.
 use super::Strategy;
-use crate::configuration::{Configuration, Movement};
+use crate::configuration::{ Configuration, Movement };
 use crate::shmem::AtomicMove;
 use std::fmt;
 
@@ -9,15 +9,21 @@ pub struct MinMax(pub u8);
 
 impl Strategy for MinMax {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        //unimplemented!("TODO: implementer min max");
-        let (movement, _) = MinMax::min_max(self, state, self.0, state.current_player);
+        //let (movement, _) = MinMax::min_max(self, state, self.0, state.current_player);
+
+        let (movement, _) = MinMax::min_max_two(self, state, self.0, false);
         movement
     }
 }
-impl MinMax{
-    fn min_max(&mut self, state: &Configuration, depth: u8, is_maximizing_player: bool) -> (Option<Movement>, i8) {
+impl MinMax {
+    fn min_max(
+        &mut self,
+        state: &Configuration,
+        depth: u8,
+        is_maximizing_player: bool
+    ) -> (Option<Movement>, i8) {
         if depth == 0 {
-            return (None, if state.current_player {state.value()} else {-state.value()});
+            return (None, state.value());
         }
         //println!("{depth}");
         let mut value;
@@ -27,36 +33,75 @@ impl MinMax{
             //maximizing player
             value = i8::MIN;
 
-            for movement in state.movements(){
-
+            for movement in state.movements() {
                 // We play the current move
                 // let new_state = state.clone();
                 // new_state.play(&movement);
-                let (_ , new_state_val) = self.min_max(&state.play(&movement), depth - 1, !is_maximizing_player);
+                let (_, new_state_val) = self.min_max(
+                    &state.play(&movement),
+                    depth - 1,
+                    !is_maximizing_player
+                );
                 if value < new_state_val {
                     value = new_state_val;
                     best_movement = Some(movement);
                 }
             }
-            
         } else {
             //minimizing player
             value = i8::MAX;
 
-            for movement in state.movements(){
-
+            for movement in state.movements() {
                 // let new_state = state.clone();
                 // new_state.play(& movement);
 
-                let (_ , new_state_val) = self.min_max(&state.play(&movement), depth - 1, !is_maximizing_player);
+                let (_, new_state_val) = self.min_max(
+                    &state.play(&movement),
+                    depth - 1,
+                    !is_maximizing_player
+                );
 
                 if value > new_state_val {
                     value = new_state_val;
                     best_movement = Some(movement);
                 }
-            }  
+            }
         }
-        return (best_movement, value) ;
+        return (best_movement, value);
+    }
+    fn min_max_two(&mut self, state: &Configuration, depth: u8, opposing_player:bool) -> (Option<Movement>, i8){
+        if depth == 0 {
+            // state.value() indicates the loss of the current player
+            return (None, state.value());
+        }
+
+        let mut value;
+        let mut best_movement: Option<Movement> = None;
+
+        // Minimize loss for our player
+        value = i8::MAX;
+
+        for movement in state.movements() {
+            // We play the current move
+
+            let (_, mut new_state_val) = self.min_max_two(
+                &state.play(&movement),
+                depth - 1,
+                !opposing_player
+            );
+            // If opposing player, we want to maximize the loss
+            // => minimizing the gain
+            if opposing_player {new_state_val = -new_state_val;}
+            if value > new_state_val {
+                value = new_state_val;
+                best_movement = Some(movement);
+            }
+        }
+        // And restore original value
+        if opposing_player{
+            value = - value;
+        }
+        (best_movement, value)
     }
 }
 impl fmt::Display for MinMax {
