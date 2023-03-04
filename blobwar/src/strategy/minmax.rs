@@ -114,7 +114,7 @@ impl MinMax {
     }
     
     /// Parallel min-max algorithm
-    fn min_max_par(&mut self, state: &Configuration, depth: u8, opposing_player:bool) -> (Option<Movement>, i8){
+    fn min_max_par(&self, state: &Configuration, depth: u8, opposing_player:bool) -> (Option<Movement>, i8){
         if depth == 0 {
             // state.value() indicates the loss of the current player
             return (None, state.value());
@@ -125,7 +125,7 @@ impl MinMax {
 
         // Minimize loss for our player
 
-        let values= state.movements().map(|movement| {
+        let values= state.movements().par_bridge().map(|movement| {
             // We play the current move
 
             let (_, new_state_val) = self.min_max_par(
