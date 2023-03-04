@@ -30,7 +30,7 @@ impl MinMax {
         //println!("{depth}");
         let mut value;
         let mut best_movement: Option<Movement> = None;
-
+        let mut empty = true;
         if !is_maximizing_player {
             //maximizing player
             value = i8::MIN;
@@ -39,6 +39,7 @@ impl MinMax {
                 // We play the current move
                 // let new_state = state.clone();
                 // new_state.play(&movement);
+                empty = false;
                 let (_, new_state_val) = self.min_max(
                     &state.play(&movement),
                     depth - 1,
@@ -54,6 +55,7 @@ impl MinMax {
             value = i8::MAX;
 
             for movement in state.movements() {
+                empty = false;
                 // let new_state = state.clone();
                 // new_state.play(& movement);
 
@@ -69,6 +71,7 @@ impl MinMax {
                 }
             }
         }
+        if empty {value = state.value();}
         return (best_movement, value);
     }
 
@@ -81,11 +84,12 @@ impl MinMax {
 
         let mut value;
         let mut best_movement: Option<Movement> = None;
-        
+        let mut empty = true;
         // Minimize loss for our player
         value = i8::MAX;
 
         for movement in state.movements() {
+            empty = false;
             // We play the current move
 
             let (_, mut new_state_val) = self.min_max_two(
@@ -105,6 +109,7 @@ impl MinMax {
         if opposing_player{
             value = - value;
         }
+        if empty {value = state.value();}
         (best_movement, value)
     }
     
