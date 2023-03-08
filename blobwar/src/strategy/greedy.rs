@@ -1,6 +1,7 @@
 //! Dumb greedy algorithm.
 use super::Strategy;
 use crate::configuration::{Configuration, Movement};
+use rayon::prelude::*;
 use std::fmt;
 
 /// Dumb algorithm.
@@ -16,6 +17,12 @@ impl fmt::Display for Greedy {
 
 impl Strategy for Greedy {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        unimplemented!("TODO: algo glouton")
+        state.movements().max_by_key(|&movement| state.play(&movement).value())
+    }
+}
+
+impl Greedy {
+    fn greedy_par(&mut self, state: &Configuration) -> Option<Movement> {
+        state.movements().par_bridge().max_by_key(|&movement| state.play(&movement).value())
     }
 }
