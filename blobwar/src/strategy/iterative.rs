@@ -17,6 +17,8 @@ pub enum IterativeStrategy {
     MinMax,
     /// AlphaBeta algorithm
     AlphaBeta,
+    /// AlphaBeta algorithm
+    AlphaBetaPass,
 }
 
 /// Anytime algorithms strategies. Implemented in another process.
