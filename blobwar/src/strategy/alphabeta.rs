@@ -28,15 +28,9 @@ impl fmt::Display for AlphaBeta {
 
 impl Strategy for AlphaBeta {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
-        let (mut alpha, mut beta) = (i8::MIN, i8::MAX);
-        let m = self.elagage_no_par(state, self.0, &alpha, &beta, false).0;
-        match m {
-            Some(m) => {
-                println!("{:?}", m);
-                None
-            }
-            None => None,
-        }
+        let (alpha, beta) = (i8::MIN, i8::MIN);
+        let (movement, _) = AlphaBeta::elagage_no_par(self, state, self.0, alpha, beta, false);
+        movement
     }
 }
 
@@ -45,57 +39,56 @@ impl AlphaBeta {
         &mut self,
         state: &Configuration,
         depth: u8,
-        alpha: &i8,
-        beta: &i8,
-        minimize_player: bool,
+        mut alpha: i8,
+        mut beta: i8,
+        opposing_player: bool,
     ) -> (Option<Movement>, i8) {
-        println!("alpha {:} beta {:}", alpha, beta);
         if depth == 0 {
             return (None, state.value());
         }
-        let mut a = *alpha;
-        let mut b = *beta;
-        if minimize_player {
-            let mut v = i8::MAX;
-            for movement in state.movements() {
-                v = std::cmp::min(
-                    v,
-                    self.elagage_no_par(
-                        &state.play(&movement),
-                        depth - 1,
-                        &a,
-                        &b,
-                        !minimize_player,
-                    )
-                    .1,
-                );
-                if v >= b {
-                    return (Some(movement), v);
-                }
-                b = std::cmp::min(b, v);
+
+        let mut best_movement: Option<Movement> = None;
+        let mut best_value: i8 = i8::MIN;
+
+        for movement in state.movements() {
+            let (_, new_value) = self.elagage_no_par(
+                &state.play(&movement),
+                depth - 1,
+                alpha,
+                beta,
+                !opposing_player,
+            );
+
+            // Compute the evaluation of the current move and store it along with the movement in a tuple to avoid redundant computation.
+            let (value, movement) = (new_value, Some(movement));
+
+            if value > best_value {
+                best_value = value;
+                best_movement = movement;
             }
-        } else {
-            let mut v = i8::MIN;
-            for movement in state.movements() {
-                println!("here");
-                v = std::cmp::max(
-                    v,
-                    self.elagage_no_par(
-                        &state.play(&movement),
-                        depth - 1,
-                        &a,
-                        &b,
-                        !minimize_player,
-                    )
-                    .1,
-                );
-                if a >= v {
-                    return (Some(movement), v);
-                }
-                println!("alpha treated {:}", a);
-                a = std::cmp::max(a, v);
+
+            // Update alpha and beta
+            if opposing_player && value > beta {
+                beta = value;
+            } else if !opposing_player && value > alpha {
+                alpha = value;
+            }
+
+
+            // Alpha - Beta cut off
+            if opposing_player && -beta <= alpha {
+                return (best_movement, -best_value);
+            }
+            else if !opposing_player && -alpha <= beta {
+                return (best_movement, -best_value);
             }
         }
-        return (None, state.value());
+
+        if best_movement.is_none() {
+            let (_, val) = AlphaBeta::elagage_no_par(self, state, depth - 1, alpha, beta, true);
+            (None, val)
+        } else {
+            return (best_movement, -best_value);
+        }
     }
 }
