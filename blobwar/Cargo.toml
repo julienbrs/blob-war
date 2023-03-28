@@ -17,5 +17,12 @@ serde="*"
 serde_json="*"
 rayon = "1.7"
 
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "strategy_benchmark"
+harness = false
+
 [target.'cfg(unix)'.dependencies]
 nix="0.6"
