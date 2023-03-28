@@ -1,4 +1,4 @@
-//! Alpha - Beta algorithm
+//! Alpha - Beta algorithm with Transposition Table.
 use std::fmt;
 
 use super::Strategy;
@@ -9,33 +9,33 @@ use crate::shmem::AtomicMove;
 /// Any time algorithms will compute until a deadline is hit and the process is killed.
 /// They are therefore run in another process and communicate through shared memory.
 /// This function is intended to be called from blobwar_iterative_deepening.
-pub fn alpha_beta_anytime(state: &Configuration) {
+pub fn alpha_beta_table_anytime(state: &Configuration) {
     let mut movement = AtomicMove::connect().expect("failed connecting to shmem");
     for depth in 1..100 {
-        let chosen_movement = AlphaBeta(depth).compute_next_move(state);
+        let chosen_movement = AlphaBetaTable(depth).compute_next_move(state);
         movement.store(chosen_movement);
     }
 }
 
 /// Alpha - Beta algorithm with given maximum number of recursions.
-pub struct AlphaBeta(pub u8);
+pub struct AlphaBetaTable(pub u8);
 
-impl fmt::Display for AlphaBeta {
+impl fmt::Display for AlphaBetaTable {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Alpha - Beta (max level: {})", self.0)
     }
 }
 
-impl Strategy for AlphaBeta {
+impl Strategy for AlphaBetaTable {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
         let (alpha, beta) = (i8::MIN, i8::MIN);
-        let (movement, _) = AlphaBeta::alphabeta(self, state, self.0, alpha, beta, false);
+        let (movement, _) = AlphaBetaTable::alphabetaTable(self, state, self.0, alpha, beta, false);
         movement
     }
 }
 
-impl AlphaBeta {
-    fn alphabeta(
+impl AlphaBetaTable {
+    fn alphabetaTable(
         &mut self,
         state: &Configuration,
         depth: u8,
@@ -51,7 +51,7 @@ impl AlphaBeta {
         let mut best_value: i8 = i8::MIN;
 
         for movement in state.movements() {
-            let (_, new_value) = self.alphabeta(
+            let (_, new_value) = self.alphabetaTable(
                 &state.play(&movement),
                 depth - 1,
                 alpha,
@@ -83,7 +83,7 @@ impl AlphaBeta {
         }
 
         if best_movement.is_none() {
-            let (_, val) = AlphaBeta::alphabeta(self, state, depth - 1, alpha, beta, true);
+            let (_, val) = AlphaBetaTable::alphabetaTable(self, state, depth - 1, alpha, beta, true);
             (None, val)
         } else {
             return (best_movement, -best_value);
