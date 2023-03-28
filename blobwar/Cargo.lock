@@ -3,6 +3,7 @@
 version = 3
 
 [[package]]
+<<<<<<< HEAD
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -14,6 +15,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -78,6 +81,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+<<<<<<< HEAD
 name = "clap"
 version = "2.34.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -125,6 +129,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "crossbeam-channel"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -168,6 +174,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "csv"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -189,6 +196,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "either"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -201,6 +210,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8be18de09a56b60ed0edf84bc9df007e30040691af7acd1c41874faac5895bfb"
 
 [[package]]
+<<<<<<< HEAD
 name = "half"
 version = "1.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -216,6 +226,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "hermit-abi"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -300,12 +312,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "memoffset"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d61c719bcfbcf5d62b3a09efa6088de8c54bc0bfcd3ea7ae39fcc186108b8de1"
+dependencies = [
+ "autocfg",
+]
+
+[[package]]
 name = "nix"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a7bb1da2be7da3cbffda73fc681d509ffd9e665af478d2bee1907cee0bc64b2"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 0.4.0",
+=======
+ "bitflags",
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
  "cfg-if 0.1.6",
  "libc",
  "rustc_version",
@@ -314,6 +339,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "num-traits"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -323,16 +349,23 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "num_cpus"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
 dependencies = [
+<<<<<<< HEAD
  "hermit-abi 0.2.6",
+=======
+ "hermit-abi",
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
  "libc",
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "once_cell"
 version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -373,6 +406,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "proc-macro2"
 version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -400,6 +435,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "quote"
 version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -409,6 +445,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "rayon"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -431,6 +469,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "regex"
 version = "1.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -446,6 +485,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "rustc_version"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -461,6 +502,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eb9e9b8cde282a9fe6a42dd4681319bfb63f121b8a8ee9439c6f4107e58a46f7"
 
 [[package]]
+<<<<<<< HEAD
 name = "ryu"
 version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -476,6 +518,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 81e2a7ff705edc6447b24e7124ca63cbef93afb2
 name = "scopeguard"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
