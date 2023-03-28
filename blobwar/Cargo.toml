@@ -16,6 +16,7 @@ serde_derive="*"
 serde="*"
 serde_json="*"
 rayon = "1.7"
+rand = "0.8.4"
 
 [target.'cfg(unix)'.dependencies]
 nix="0.6"
