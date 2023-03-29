@@ -1,6 +1,6 @@
 use blobwar::board::Board;
 use blobwar::configuration::Configuration;
-use blobwar::strategy::{alpha_beta_anytime, min_max_anytime};
+use blobwar::strategy::{alpha_beta_anytime, alpha_beta_pass_anytime, min_max_anytime};
 use std::env;
 
 fn main() {
@@ -18,6 +18,7 @@ fn main() {
     {
         0 => min_max_anytime(&configuration),
         1 => alpha_beta_anytime(&configuration),
+        2 => alpha_beta_pass_anytime(&configuration),
         _ => panic!("invalid strategy number"),
     }
 }
