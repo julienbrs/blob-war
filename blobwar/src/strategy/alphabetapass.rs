@@ -1,4 +1,5 @@
 //! Alpha - Beta algorithm with Pass heuristic
+use core::panic;
 use std::fmt;
 
 use super::Strategy;
@@ -11,7 +12,8 @@ use crate::shmem::AtomicMove;
 /// This function is intended to be called from blobwar_iterative_deepening.
 pub fn alpha_beta_pass_anytime(state: &Configuration) {
     let mut movement = AtomicMove::connect().expect("failed connecting to shmem");
-    for depth in 1..100 {
+    for depth in 5..100 {
+        println!("{:}{:}{:}{:}", depth, depth, depth, depth);
         let chosen_movement = AlphaBetaPass(depth).compute_next_move(state);
         movement.store(chosen_movement);
     }
@@ -70,19 +72,52 @@ impl AlphaBetaPass {
                 // did not play (it passes) at depth k + 1. The idea is that in general this choice is bad.
                 // Thus, if the result obtained remains good, the position must be really good, otherwise,
                 // a normal search must be done.
-                if depth == 2 {
+                if depth == 3 {
+                    // let best_state: &Configuration = state;
                     // Play a skip turn and then check if the value is still good
-                    let (_, val) = self.alphabetaPass(
-                        &state.skip_play(),
-                        depth - 1,
-                        alpha,
-                        beta,
-                        !opposing_player,
-                    );
-                    if val > best_value {
-                        best_value = val;
-                        best_movement = None;
+                    if best_value <= -7 {
+                        match best_movement {
+                            Some(m) => {
+                                let best_state = state.play(&m);
+                                let (_, val) = self.alphabetaPass(
+                                    &best_state.skip_play(),
+                                    depth - 1,
+                                    alpha,
+                                    beta,
+                                    !opposing_player,
+                                );
+                                if val >= best_value && !opposing_player {
+                                    print!("A");
+                                    return (best_movement, best_value);
+                                }
+                            }
+                            None => {
+                                let best_state = state.skip_play();
+                                let (_, val) = self.alphabetaPass(
+                                    &best_state.skip_play(),
+                                    depth - 1,
+                                    alpha,
+                                    beta,
+                                    !opposing_player,
+                                );
+                                if val >= best_value && !opposing_player {
+                                    print!("A");
+                                    return (best_movement, best_value);
+                                }
+                            }
+                        }
                     }
+
+                    // let (_, val) = self.alphabetaPass(
+                    //     &best_state.skip_play(),
+                    //     depth - 1,
+                    //     alpha,
+                    //     beta,
+                    //     !opposing_player,
+                    // );
+                    // if val >= best_value {
+                    //     return (best_movement, best_value);
+                    // }
                 }
             }
 
