@@ -1,8 +1,7 @@
 //! Alpha - Beta algorithm with Pass heuristic
-use core::panic;
 use std::fmt;
 
-use super::Strategy;
+use super::{BenchmarkUnitaire, Strategy};
 use crate::configuration::{Configuration, Movement};
 use crate::shmem::AtomicMove;
 
@@ -13,9 +12,14 @@ use crate::shmem::AtomicMove;
 pub fn alpha_beta_pass_anytime(state: &Configuration) {
     let mut movement = AtomicMove::connect().expect("failed connecting to shmem");
     for depth in 5..100 {
-        println!("{:}{:}{:}{:}", depth, depth, depth, depth);
         let chosen_movement = AlphaBetaPass(depth).compute_next_move(state);
         movement.store(chosen_movement);
+    }
+}
+
+impl BenchmarkUnitaire for AlphaBetaPass {
+    fn new(depth: u8) -> Self {
+        return AlphaBetaPass(depth);
     }
 }
 
@@ -87,7 +91,6 @@ impl AlphaBetaPass {
                                     !opposing_player,
                                 );
                                 if val >= best_value && !opposing_player {
-                                    print!("A");
                                     return (best_movement, best_value);
                                 }
                             }
@@ -101,7 +104,6 @@ impl AlphaBetaPass {
                                     !opposing_player,
                                 );
                                 if val >= best_value && !opposing_player {
-                                    print!("A");
                                     return (best_movement, best_value);
                                 }
                             }

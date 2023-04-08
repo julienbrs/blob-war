@@ -9,6 +9,12 @@ pub trait Strategy: fmt::Display {
     fn compute_next_move(&mut self, configuration: &Configuration) -> Option<Movement>;
 }
 
+/// Create a new Strategy to then benchmark it
+pub trait BenchmarkUnitaire: Strategy {
+    /// return new
+    fn new(depth: u8) -> Self;
+}
+
 pub mod human;
 pub use self::human::Human;
 pub mod network;

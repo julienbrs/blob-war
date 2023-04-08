@@ -1,5 +1,5 @@
 //! Implementation of the min max algorithm.
-use super::Strategy;
+use super::{BenchmarkUnitaire, Strategy};
 use crate::configuration::{ Configuration, Movement };
 use crate::shmem::AtomicMove;
 use rayon::prelude::*;
@@ -7,6 +7,12 @@ use std::fmt;
 
 /// Min-Max algorithm with a given recursion depth.ch
 pub struct MinMax(pub u8);
+
+impl BenchmarkUnitaire for MinMax {
+    fn new(depth: u8) -> Self {
+        return MinMax(depth);
+    }
+}
 
 impl Strategy for MinMax {
     fn compute_next_move(&mut self, state: &Configuration) -> Option<Movement> {
@@ -27,7 +33,6 @@ impl MinMax {
         if depth == 0 {
             return (None, state.value());
         }
-        //println!("{depth}");
         let mut value;
         let mut best_movement: Option<Movement> = None;
         let mut empty = true;

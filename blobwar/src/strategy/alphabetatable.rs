@@ -2,7 +2,7 @@
 use std::collections::HashMap;
 use std::fmt;
 
-use super::Strategy;
+use super::{BenchmarkUnitaire, Strategy};
 use crate::configuration::{Configuration, Movement};
 use crate::shmem::AtomicMove;
 use rand::Rng;
@@ -21,8 +21,13 @@ fn generate_zobrist_table() -> [[[u64; BOARD_SIZE]; BOARD_SIZE]; PIECE_TYPES] {
             }
         }
     }
-
     table
+}
+
+impl BenchmarkUnitaire for AlphaBetaTable {
+    fn new(depth: u8) -> Self {
+        return AlphaBetaTable(depth);
+    }
 }
 
 struct TranspositionTable {
@@ -103,7 +108,7 @@ impl AlphaBetaTable {
         let mut best_value: i8 = i8::MIN;
 
         for movement in state.movements() {
-            let new_value:i8;
+            let new_value: i8;
             // Check if the current state is already in the transposition table.
             if let Some(value) = transposition_table.get(state.zobrist_key(*zobrist_table)) {
                 new_value = if opposing_player { -value } else { value };

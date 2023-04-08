@@ -8,9 +8,9 @@ fn _benchmark(c: &mut Criterion) {
     let board = Default::default();
     let mut game = black_box(Configuration::new(&board));
     c.bench_function("minmax algorithm", |b| {
-        b.iter(|| game.battle(MinMax(1), Greedy()))
-    });
-}
+            b.iter(|| game.battle(MinMax(1), Greedy()))
+        });
+    }
 
 criterion_group!(benches, _benchmark);
 criterion_main!(benches);

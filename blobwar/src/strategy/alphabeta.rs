@@ -1,7 +1,7 @@
 //! Alpha - Beta algorithm
 use std::fmt;
 
-use super::Strategy;
+use super::{BenchmarkUnitaire, Strategy};
 use crate::configuration::{Configuration, Movement};
 use crate::shmem::AtomicMove;
 
@@ -31,6 +31,12 @@ impl Strategy for AlphaBeta {
         let (alpha, beta) = (i8::MIN, i8::MIN);
         let (movement, _) = AlphaBeta::alphabeta(self, state, self.0, alpha, beta, false);
         movement
+    }
+}
+
+impl BenchmarkUnitaire for AlphaBeta {
+    fn new(depth: u8) -> Self {
+        return AlphaBeta(depth);
     }
 }
 
