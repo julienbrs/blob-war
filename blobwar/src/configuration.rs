@@ -7,6 +7,9 @@ use std::fmt;
 use std::iter::once;
 use term;
 
+const BOARD_SIZE: usize = 8;
+const PIECE_TYPES: usize = 2;
+
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq, Eq)]
 /// Movements : clone some blob or jump
 pub enum Movement {
@@ -36,6 +39,34 @@ impl<'a> Configuration<'a> {
             board,
             current_player: false,
         }
+    }
+
+    /// Calculates the Zobrist hash key for the current board position using the given Zobrist hash table.
+    ///
+    /// # Arguments
+    ///
+    /// * `zobrist_table` - A 3-dimensional array representing the Zobrist hash table, where the first dimension is the piece type,
+    /// the second dimension is the row index, and the third dimension is the column index.
+    ///
+    /// # Returns
+    ///
+    /// The Zobrist hash key for the current board position.
+    pub fn zobrist_key(
+        &self,
+        zobrist_table: [[[u64; BOARD_SIZE]; BOARD_SIZE]; PIECE_TYPES],
+    ) -> u64 {
+        let mut key = 0;
+
+        for (piece_type, positions) in self.blobs.iter().enumerate() {
+            for (piece_type, positions) in self.blobs.iter().enumerate() {
+                for position in positions.positions() {
+                    let (x, y) = position.to_2d();
+                    key ^= zobrist_table[piece_type][x as usize][y as usize];
+                }
+            }
+        }
+
+        key
     }
 
     /// Play given move on self.
