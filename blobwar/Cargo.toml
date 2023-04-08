@@ -22,7 +22,7 @@ rand = "0.8.4"
 criterion = "0.3"
 
 [[bench]]
-name = "strategy_benchmark"
+name = "benchmark"
 harness = false
 
 [target.'cfg(unix)'.dependencies]
