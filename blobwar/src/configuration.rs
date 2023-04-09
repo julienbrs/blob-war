@@ -184,6 +184,25 @@ impl<'a> Configuration<'a> {
         println!("GAME OVER (red value of {})", value);
     }
 
+    /// Play a match between the given players starting from current `Configuration`.
+    pub fn battle_no_log<T: Strategy, U: Strategy>(&mut self, mut player_one: T, mut player_two: U) {
+        while !self.game_over() {
+            let play_attempt = if self.current_player {
+                player_two.compute_next_move(self)
+            } else {
+                player_one.compute_next_move(self)
+            };
+            if let Some(ref next_move) = play_attempt {
+                assert!(self.check_move(next_move));
+                self.apply_movement(next_move);
+            } else {
+                self.current_player = !self.current_player;
+            }
+        }
+
+        let value = self.blobs[0].len() - self.blobs[1].len();
+    }
+
     /// Return true if no empty space remains or someone died.
     fn game_over(&self) -> bool {
         self.blobs[0].is_empty()

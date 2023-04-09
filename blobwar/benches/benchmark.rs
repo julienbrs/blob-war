@@ -1,4 +1,4 @@
-/// Measures mean time for the same set of serialized game states
+/// Measures mean benchmark for the same set of serialized game states
 use std::{fs, io::Read};
 
 use blobwar::board::Board;
@@ -6,43 +6,41 @@ use blobwar::configuration::Configuration;
 use blobwar::strategy::{
     AlphaBeta, AlphaBetaPass, AlphaBetaTable, BenchmarkUnitaire, MinMax, Strategy,
 };
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::measurement::WallTime;
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkGroup, Criterion};
 
-static MIN_DEPTH: u8 = 1;
-static MAX_DEPTH: u8 = 3;
+static MIN_DEPTH: u8 = 3;
+static MAX_DEPTH: u8 = 6;
 
 // Do benchmark on all strategies
-fn general_benchmark<T: BenchmarkUnitaire>(c: &mut Criterion, name: &str) {
-    let mut group = c.benchmark_group("Benchmark");
+fn benchmark_per_group<T: Strategy>(
+    group: &mut  BenchmarkGroup<WallTime>,
+    name: &str,
+    createfunc: fn(u8) -> T,
+) {
     for size in MIN_DEPTH..=MAX_DEPTH {
         group.throughput(criterion::Throughput::Bytes(size as u64));
-        group.bench_with_input(format!("{name}"), &size, |b, &s| {
+        group.bench_with_input(name, &size, |b, &s| {
             b.iter(|| {
-                let strat = T::new(s);
+                let strat = createfunc(s);
                 let board = Default::default();
                 let mut game = black_box(Configuration::new(&board));
-                game.battle(strat, MinMax(2))
+                game.battle_no_log(strat, MinMax(3))
             })
         });
     }
-    group.finish();
 }
 
-fn alphabeta(c: &mut Criterion) {
-    general_benchmark::<AlphaBeta>(c, "Sequential Alphabeta");
-}
+/// Benchmark all strategies which are in criterion_group using benchmark per strategy
+fn general_benchmark(c: &mut Criterion) {
+    let mut total_group = c.benchmark_group("Benchmark all strategies");
 
-fn alphabetapass(c: &mut Criterion) {
-    general_benchmark::<AlphaBetaPass>(c, "Alphabeta with pass");
+    // call benchmark_per_group for each strategy
+    benchmark_per_group(&mut total_group, "AlphaBeta", |x| AlphaBeta::new(x));
+    benchmark_per_group(&mut total_group, "AlphaBetaPass", |x| AlphaBeta::new(x));
+    benchmark_per_group(&mut total_group, "AlphaBetaTable", |x| AlphaBeta::new(x));
+    benchmark_per_group(&mut total_group, "MinMax", |x| AlphaBeta::new(x));
+    total_group.finish(); // finish the benchmark group and plot the results
 }
-
-fn _minmax(c: &mut Criterion) {
-    general_benchmark::<MinMax>(c, "Minmax");
-}
-
-fn alphabetatable(c: &mut Criterion) {
-    general_benchmark::<AlphaBetaTable>(c, "Alphabeta with table");
-}
-
-criterion_group!(benchmark, /* alphabetapass,  */alphabeta, _minmax /* alphabetatable */);
+criterion_group!(benchmark, general_benchmark);
 criterion_main!(benchmark);
