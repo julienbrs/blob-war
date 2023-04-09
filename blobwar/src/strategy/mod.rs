@@ -23,6 +23,8 @@ pub mod greedy;
 pub use self::greedy::Greedy;
 pub mod minmax;
 pub use self::minmax::{min_max_anytime, MinMax};
+pub mod minmaxpar;
+pub use self::minmaxpar::{min_max_par_anytime, MinMaxPar};
 pub mod alphabeta;
 pub use self::alphabeta::{alpha_beta_anytime, AlphaBeta};
 pub mod alphabetapass;

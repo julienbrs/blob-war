@@ -19,6 +19,10 @@ pub enum IterativeStrategy {
     AlphaBeta,
     /// AlphaBeta algorithm
     AlphaBetaPass,
+    /// AlphaBetaTable algorithm
+    AlphaBetaTable,
+    /// MinMaxPar algorithm
+    MinMaxPar,
 }
 
 /// Anytime algorithms strategies. Implemented in another process.

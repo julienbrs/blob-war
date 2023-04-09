@@ -79,7 +79,7 @@ impl AlphaBetaPass {
                 if depth == 3 {
                     // let best_state: &Configuration = state;
                     // Play a skip turn and then check if the value is still good
-                    if best_value <= -7 {
+                    if best_value <= -4 {
                         match best_movement {
                             Some(m) => {
                                 let best_state = state.play(&m);
@@ -90,7 +90,7 @@ impl AlphaBetaPass {
                                     beta,
                                     !opposing_player,
                                 );
-                                if val >= best_value && !opposing_player {
+                                if val >= best_value - 2 && !opposing_player {
                                     return (best_movement, best_value);
                                 }
                             }

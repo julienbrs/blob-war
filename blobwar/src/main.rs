@@ -3,7 +3,7 @@
 use blobwar::configuration::Configuration;
 use blobwar::strategy::IterativeDeepening;
 use blobwar::strategy::{
-    AlphaBeta, AlphaBetaPass, AlphaBetaTable, Greedy, Human, IterativeStrategy, MinMax,
+    AlphaBeta, AlphaBetaPass, AlphaBetaTable, Greedy, Human, IterativeStrategy, MinMax, MinMaxPar
 };
 
 fn main() {
@@ -12,6 +12,6 @@ fn main() {
     let mut game = Configuration::new(&board);
     game.battle(
         IterativeDeepening::new(IterativeStrategy::MinMax),
-        IterativeDeepening::new(IterativeStrategy::AlphaBetaPass),
+        IterativeDeepening::new(IterativeStrategy::MinMaxPar),
     );
 }
