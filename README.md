@@ -71,5 +71,11 @@ For other commands, for example play online locally, refer to the provided Makef
 ## Contact
 
 Julien Bourseau - 2nd year student at Ensimag, 2023 - julien.bourseau@gmail.com
+
 Project Link: https://github.com/julienbrs/Blobwars
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/julien-bourseau-ba2239228
